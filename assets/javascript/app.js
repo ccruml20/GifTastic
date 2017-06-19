@@ -4,56 +4,49 @@ $(document).ready(function() {
     var searchGif;
     var imageData;
     var imgKeys;
+
     // Here we construct our URL
-    function findImage(res) {
-        var imagesObject
-        $.each(res.data, function(index, value) {
-            var keys = Object.keys(value);
-            keys.forEach(function(key) {
-                    if (key === "images") {
-                        // console.log("object keys" , key, value);
-                        imagesObject = value[key];
+    function findImage(imagesObj) {
+        var imageUrlStill;
+        var imageUrlMoving;
+        // var rating;
+        let keys = Object.keys(imagesObj);
+        // console.log(' IMAGE OBJECT', imageObject);
+        keys.forEach(function(key) {
+            // rating = imageObject[key].rating
+            if (key === 'original_still') {
+                imageUrlStill = imagesObj[key].url;
+            } else if (key === 'original') {
+                imageUrlMoving = imagesObj[key].url;
+            }
+        });
 
-                        // console.log("img object" ,imagesObject.original_still.url);	
-                    }
-
-                })
-              // console.log("img object" ,imagesObject);
-
-                // console.log("IM the result of img data",imageData(imagesObject).stillImage)
-
-        })
-        return imageData(imagesObject);
+        // console.log('WHAT IS OUR RES NOW???', imageUrlStill, imageUrlMoving);
+        return { imageUrlStill, imageUrlMoving };
     };
 
-    function imageData(imagesObject) {
-        var stillImage;
-        var movingImage;
-        imgKeys = Object.keys(imagesObject);
-
-        imgKeys.forEach(function(imageskey) {
-            // console.log("img key result", imageskey);
-            if (imageskey === "original_still") {
-                stillImage = imagesObject[imageskey].url;
-                // console.log("help me find the still image" , stillImage);
-                // $(".gifImages").attr('src', stillImg);
-            } else if (imageskey === 'original') {
-                movingImage = imagesObject[imageskey].url;
-            }
-        })
-         console.log("What are are image values", stillImage, movingImage);
-         console.log("img object" ,imgKeys);
-        return { stillImage, movingImage };
-       
-        
-    }
-
+    // createImage function that is being passed imageData object
     function createImage(imageData) {
 
-        console.log("what what", imageData);
-        var img = $('<img id="dynamic">');
-        img.attr('src', imageData.stillImage);
+        let keys = Object.keys(imageData);
+        let objVal = Object.values(imageData);
+        var img = $('<img id="dynamic" class="col-xs-4 still">');
+        img.attr('src', imageData.imageUrlStill);
         img.appendTo('.gifImages');
+        img.on("click", function(){
+        	img.toggleClass("still");
+        	if(img.hasClass("still")){
+        	img.attr('src', imageData.imageUrlStill);	
+        	}else {
+        	img.attr('src', imageData.imageUrlMoving);
+        	};
+        	
+
+        })
+
+
+
+
     };
 
     function fetchGifs(e) {
@@ -65,12 +58,23 @@ $(document).ready(function() {
             url: queryURL,
             method: "GET"
         }).done(function(res) {
-            imageData = findImage(res); //{ stillImage, movingImage }
-            var createdImage = createImage(imageData);
-            // createImage();
-            // console.log(res);
+        	$(".gifImages").empty();
+            res.data.forEach(function(val) {
+                var keys = Object.keys(val);
+                keys.forEach(function(key) {
+
+                    if (key === 'images' && key !== undefined) {
+                        imageData = findImage(val[key]); //{ stillImage, movingImage }
+                        var createdImage = createImage(imageData);
+
+                    }
+                })
+            })
+
         });
     };
+
+    //used a each fuction to creat buttons from categories array 
 
     $.each(categories, function(index, value) {
         var button = $("<button class='buttonStyle'>");
