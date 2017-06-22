@@ -30,7 +30,7 @@ $(document).ready(function() {
 
         let keys = Object.keys(imageData);
         let objVal = Object.values(imageData);
-        var img = $('<img id="dynamic" class="col-xs-4 still">');
+        var img = $('<img id="dynamic" class="col-xs-4 imgStyle still">');
         img.attr('src', imageData.imageUrlStill);
         img.appendTo('.gifImages');
         img.on("click", function(){
