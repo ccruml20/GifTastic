@@ -60,7 +60,7 @@ $(document).ready(function() {
         e.preventDefault();
         // console.log($(this));
         searchGif = $(this).text()
-        var queryURL = `http://api.giphy.com/v1/gifs/search?q=${searchGif}&api_key=${apiKey}`;
+        var queryURL = `https://api.giphy.com/v1/gifs/search?q=${searchGif}&api_key=${apiKey}`;
         $.ajax({
             url: queryURL,
             method: "GET"
@@ -74,6 +74,7 @@ $(document).ready(function() {
                     if (key === 'images' && key !== undefined) {
                         imageData = findImage(val[key]); //{ stillImage, movingImage }
                         var createdImage = createImage(imageData);
+
 
                     }
                 })
