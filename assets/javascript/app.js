@@ -11,7 +11,7 @@ $(document).ready(function() {
         var imageUrlMoving;
         // var rating;
         let keys = Object.keys(imagesObj);
-        // console.log(' IMAGE OBJECT', imageObject);
+        console.log(' IMAGE OBJECT', imagesObj);
         keys.forEach(function(key) {
             // rating = imageObject[key].rating
             if (key === 'original_still') {
@@ -40,14 +40,21 @@ $(document).ready(function() {
         	}else {
         	img.attr('src', imageData.imageUrlMoving);
         	};
-        	
-
         })
-
-
-
-
     };
+
+
+        
+        $(".searchBtn").on('click', function(){
+            var newSearch = $(".searchInput").val();
+            categories.push(newSearch);
+            console.log(categories);
+            $(".categoryEl").empty();
+            createButton();
+
+        });
+
+
 
     function fetchGifs(e) {
         e.preventDefault();
@@ -58,6 +65,7 @@ $(document).ready(function() {
             url: queryURL,
             method: "GET"
         }).done(function(res) {
+            console.log(res, "=====================")
         	$(".gifImages").empty();
             res.data.forEach(function(val) {
                 var keys = Object.keys(val);
@@ -75,11 +83,15 @@ $(document).ready(function() {
     };
 
     //used a each fuction to creat buttons from categories array 
-
-    $.each(categories, function(index, value) {
+    function createButton(){
+         $.each(categories, function(index, value) {
         var button = $("<button class='buttonStyle'>");
         button.text(value);
         button.click(fetchGifs);
         $(".categoryEl").append(button);
-    });
+    });   
+     };
+     createButton();
+
+
 });
