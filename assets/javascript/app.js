@@ -48,10 +48,10 @@ $(document).ready(function() {
         $(".searchBtn").on('click', function(){
             var newSearch = $(".searchInput").val();
             categories.push(newSearch);
-            console.log(categories);
+
             $(".categoryEl").empty();
             createButton();
-
+            $(".searchInput").val("")
         });
 
 
